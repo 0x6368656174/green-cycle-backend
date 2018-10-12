@@ -1,0 +1,196 @@
+@import '../variables';
+
+:host {
+  background-color: $color-green-2;
+  display: flex;
+  flex-direction: column;
+}
+
+.buttons {
+  height: 106px;
+  width: 100%;
+  background-color: $color-green-1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  width: 42px;
+  height: 42px;
+  border-radius: 42px;
+  border-style: none;
+  background-color: $color-green-2;
+  position: relative;
+  margin-right: 16px;
+  transition: background-color 0.2s ease-out;
+
+  &:hover {
+    background-color: $color-green-3;
+  }
+
+  &:nth-last-of-type(1) {
+    margin-right: 0;
+  }
+
+  &:before {
+    content: '';
+    display: block;
+    width: 42px;
+    height: 42px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    background-color: #fff;
+  }
+
+  &--mail:before {
+    mask-image: url('../../assets/icons/icon--mail.svg');
+    mask-size: 16px 12px;
+  }
+
+  &--call:before {
+    mask-image: url('../../assets/icons/icon--call.svg');
+    mask-size: 16px 20px;
+  }
+  &--write:before {
+    mask-image: url('../../assets/icons/icon--write.svg');
+    mask-size: 17px 17px;
+  }
+
+  &--active {
+    background-color: #fff;
+
+    &:before {
+      background-color: $color-green-1;
+    }
+
+    &:after {
+      content: '';
+      display: block;
+      width: 5px;
+      height: 5px;
+      border-radius: 5px;
+      background-color: #fff;
+      position: absolute;
+      left: 19px;
+      top: 47px;
+    }
+  }
+}
+
+.menu {
+  margin-top: 43px;
+  padding-left: 40px;
+}
+
+.menu-item {
+  height: 50px;
+}
+
+.menu-link {
+  color: $color-green-4;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease-out;
+
+  &:hover {
+    font-weight: 700;
+    color: #fff;
+  }
+
+  &:hover:before {
+    background-color: #fff;
+  }
+
+  &:before {
+    content: '';
+    display: block;
+    margin-right: 19px;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    background-color: $color-green-4;
+    width: 17px;
+    height: 17px;
+    transition: background-color 0.2s ease-out;
+  }
+
+  &--active {
+    color: #fff;
+    font-weight: 700;
+
+    &:before {
+      background-color: #fff;
+    }
+  }
+
+
+  &--home:before {
+    mask-image: url('../../assets/icons/icon--home.svg');
+    mask-size: 17px 14px;
+  }
+
+  &--location:before {
+    mask-image: url('../../assets/icons/icon--location.svg');
+    mask-size: 11px 16px;
+  }
+
+  &--cycle:before {
+    mask-image: url('../../assets/icons/icon--cycle.svg');
+    mask-size: 17px 14px;
+  }
+
+  &--finance:before {
+    mask-image: url('../../assets/icons/icon--finance.svg');
+    mask-size: 15px 15px;
+  }
+
+  &--statistic:before {
+    mask-image: url('../../assets/icons/icon--statistic.svg');
+    mask-size: 17px 10px;
+  }
+
+  &--users:before {
+    mask-image: url('../../assets/icons/icon--users.svg');
+    mask-size: 13px 13px;
+  }
+
+  &--price:before {
+    mask-image: url('../../assets/icons/icon--price.svg');
+    mask-size: 15px 15px;
+  }
+
+  &--mail:before {
+    mask-image: url('../../assets/icons/icon--mail.svg');
+    mask-size: 15px 12px;
+  }
+}
+
+.bottom-menu {
+  margin-top: auto;
+  padding-left: 40px;
+  margin-bottom: 45px;
+}
+
+.copyright {
+  color: $color-green-4;
+  font-size: 13px;
+}
+
+.support {
+  margin-top: 12px;
+}
+
+.bottom-menu-link {
+  color: #fff;
+  font-size: 13px;
+  transition: color 0.2s ease-out;
+  text-decoration: none;
+
+  &:hover {
+    color: $color-green-4;
+  }
+}

@@ -1,0 +1,14 @@
+<div #map class="map dg-custom-map"></div>
+
+<app-dashboard-chart class="chart-1" [title]="'Статистика пробега'" statistic="mileage"></app-dashboard-chart>
+
+<app-dashboard-chart class="chart-2" [title]="'Финансы'" statistic="revenue"></app-dashboard-chart>
+
+<app-dashboard-pipes class="chart-3"
+                     firstTitle="Прибыль"
+                     firstStatisticValue="profit"
+                     secondTitle="Загруженность"
+                     secondStatisticValue="workload"
+></app-dashboard-pipes>
+
+<app-dashboard-table class="table"></app-dashboard-table>

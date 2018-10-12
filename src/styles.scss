@@ -1,0 +1,40 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~reset.css";
+
+* {
+  box-sizing: border-box;
+}
+
+// Костомизирум 2Гис
+.dg-custom-map {
+  .dg-control-round {
+    border-style: none;
+    background: none;
+    box-shadow: none;
+  }
+
+  .dg-control-round__icon {
+    background: none;
+    box-shadow: none;
+
+    &:hover {
+      background: none!important;
+      box-shadow: none!important;
+    }
+
+    &:after {
+      background-image: url('./assets/icon--full-screen.svg');
+      background-size: 20px 20px;
+      width: 20px;
+      height: 20px;
+      transition: width 0.2s ease-out, height 0.2s ease-out, background-size 0.2s ease-out;
+    }
+
+    &:hover:after {
+      background-image: url('./assets/icon--full-screen.svg') !important;
+      background-size: 28px 28px !important;
+      width: 28px !important;
+      height: 28px !important;
+    }
+  }
+}

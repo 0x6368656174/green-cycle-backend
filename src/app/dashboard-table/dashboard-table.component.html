@@ -1,0 +1,43 @@
+<div class="header">
+  <h1 class="title">Велосипеды в пути</h1>
+
+  <app-icon-button class="other" icon="other" iconStyle="green"></app-icon-button>
+</div>
+
+<div class="table-container">
+  <table class="table" cdk-table [dataSource]="bicycles">
+    <ng-container cdkColumnDef="phone">
+      <th class="table-head-cell" cdk-header-cell *cdkHeaderCellDef> ТЕЛЕФОН </th>
+      <td class="table-cell" cdk-cell *cdkCellDef="let row"> <a class="table-link" href="/client/{{row.clientId}}">{{row.phone}}</a> </td>
+    </ng-container>
+
+    <ng-container cdkColumnDef="bicycle">
+      <th class="table-head-cell" cdk-header-cell *cdkHeaderCellDef> ВЕЛОСИПЕД </th>
+      <td class="table-cell" cdk-cell *cdkCellDef="let row"> <a class="table-link" href="/bicycle/{{row.bicycleId}}">{{row.bicycle}}</a> </td>
+    </ng-container>
+
+    <ng-container cdkColumnDef="rentalStart">
+      <th class="table-head-cell" cdk-header-cell *cdkHeaderCellDef> НАЧАЛО ПРОКАТА </th>
+      <td class="table-cell" cdk-cell *cdkCellDef="let row"> {{row.rentalStartString}} </td>
+    </ng-container>
+
+    <ng-container cdkColumnDef="mileage">
+      <th class="table-head-cell" cdk-header-cell *cdkHeaderCellDef> КИЛОМЕТРАЖ </th>
+      <td class="table-cell" cdk-cell *cdkCellDef="let row"> {{row.mileage}} км </td>
+    </ng-container>
+
+    <ng-container cdkColumnDef="duration">
+      <th class="table-head-cell" cdk-header-cell *cdkHeaderCellDef> ВРЕМЯ </th>
+      <td class="table-cell" cdk-cell *cdkCellDef="let row"> {{row.duration}} </td>
+    </ng-container>
+
+    <ng-container cdkColumnDef="amount">
+      <th class="table-head-cell" cdk-header-cell *cdkHeaderCellDef> СУММА </th>
+      <td class="table-cell" cdk-cell *cdkCellDef="let row"> {{row.amount}} ₽ </td>
+    </ng-container>
+
+    <!-- Header and Row Declarations -->
+    <tr class="table-head-row" cdk-header-row *cdkHeaderRowDef="['phone', 'bicycle', 'rentalStart', 'mileage', 'duration', 'amount']"></tr>
+    <tr class="table-row" cdk-row *cdkRowDef="let row; columns: ['phone', 'bicycle', 'rentalStart', 'mileage', 'duration', 'amount']"></tr>
+  </table>
+</div>
