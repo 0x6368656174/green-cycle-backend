@@ -3,8 +3,6 @@ import * as moment from 'moment';
 export function calculateAmount(rentalStart: moment.Moment, rentalEnd: moment.Moment): number {
   const duration = moment.duration(rentalEnd.diff(rentalStart));
 
-  console.log(duration.hours());
-
   if (duration.asDays() > 1) {
     return 1600;
   }

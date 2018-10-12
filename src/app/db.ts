@@ -15,8 +15,14 @@ export interface IClient {
   readonly phone: number;
 }
 
+export interface IGeoCoordinate {
+  readonly latitude: number;
+  readonly longitude: number;
+}
+
 export interface IActiveBicycle {
   readonly client: DocumentReference;
   readonly rentalStart: Timestamp;
   readonly mileage: number;
+  readonly position: IGeoCoordinate;
 }

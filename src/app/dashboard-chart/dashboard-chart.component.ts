@@ -1,21 +1,20 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as Chart from 'chart.js';
 import * as moment from 'moment';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard-chart',
   templateUrl: './dashboard-chart.component.html',
   styleUrls: ['./dashboard-chart.component.scss']
 })
-export class DashboardChartComponent implements OnInit {
+export class DashboardChartComponent implements OnInit, OnDestroy {
   @Input() title: string;
   @Input() statistic: string;
 
   @ViewChild('chart') chartContainer: ElementRef<HTMLCanvasElement>;
-  private chart: Chart;
 
   startTime$: BehaviorSubject<moment.Moment> = new BehaviorSubject(moment().add(-1, 'M'));
   endTime$: BehaviorSubject<moment.Moment> = new BehaviorSubject(moment());
@@ -23,10 +22,12 @@ export class DashboardChartComponent implements OnInit {
   days$: Observable<moment.Moment[]>;
   values$: Observable<number[]>;
   max$: Observable<number>;
+  private chart: Chart;
+  private ngUnsubscribe = new Subject();
 
   constructor(private firestore: AngularFirestore) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.range$ = combineLatest(this.startTime$, this.endTime$).pipe(
       map(([startTime, endTime]) => `${startTime.format('DD MMMM')} - ${endTime.format('DD MMMM')}`),
     );
@@ -55,6 +56,7 @@ export class DashboardChartComponent implements OnInit {
 
         return combineLatest(values$);
       }),
+      takeUntil(this.ngUnsubscribe),
     );
 
     this.max$ = this.values$.pipe(
@@ -142,4 +144,8 @@ export class DashboardChartComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 }

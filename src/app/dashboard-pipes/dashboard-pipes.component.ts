@@ -1,15 +1,15 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as Chart from 'chart.js';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard-pipes',
   templateUrl: './dashboard-pipes.component.html',
   styleUrls: ['./dashboard-pipes.component.scss']
 })
-export class DashboardPipesComponent implements OnInit {
+export class DashboardPipesComponent implements OnInit, OnDestroy {
   @Input() firstTitle: string;
   @Input() secondTitle: string;
   @Input() firstStatisticValue: string;
@@ -22,19 +22,22 @@ export class DashboardPipesComponent implements OnInit {
   secondValue$: Observable<number>;
   private firstChart: Chart;
   private secondChart: Chart;
+  private ngUnsubscribe = new Subject();
 
   constructor(private firestore: AngularFirestore) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.firstValue$ = this.firestore.collection('statisticValues').doc(this.firstStatisticValue).valueChanges().pipe(
       map(({max, current}) => {
         return Math.round(max / 100 * current);
       }),
+      takeUntil(this.ngUnsubscribe),
     );
     this.secondValue$ = this.firestore.collection('statisticValues').doc(this.secondStatisticValue).valueChanges().pipe(
       map(({max, current}) => {
         return Math.round(max / 100 * current);
       }),
+      takeUntil(this.ngUnsubscribe),
     );
 
     const options: Chart.ChartConfiguration = {
@@ -85,4 +88,8 @@ export class DashboardPipesComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 }
