@@ -56,13 +56,13 @@ class ActiveBicyclesDataSource extends DataSource<IActiveBicycleRow> {
               const duration = moment.duration(currentTime.diff(row.rentalStart)).clone();
 
               let durationString = '';
-              if (duration.days() > 1) {
+              if (duration.days() >= 1) {
                 durationString += pluralize(duration.days(), 'день', 'дня', 'дней');
               }
-              if (duration.hours() > 1) {
+              if (duration.hours() >= 1) {
                 durationString += ' ' + pluralize(duration.hours(), 'час', 'часа', 'часов');
               }
-              if (duration.minutes() > 1) {
+              if (duration.minutes() >= 1) {
                 durationString += ' ' + pluralize(duration.minutes(), 'минута', 'минуты', 'минут');
               }
               return {
