@@ -5,6 +5,8 @@ export interface IRentalPoint {
   readonly address: string;
   readonly latitude: number;
   readonly longitude: number;
+  readonly capacity: number;
+  readonly bicycles: DocumentReference[];
 }
 
 export interface IBicycle {
