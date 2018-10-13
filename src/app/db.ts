@@ -1,12 +1,11 @@
 import { DocumentReference } from '@angular/fire/firestore';
-import { Timestamp } from '@firebase/firestore-types';
+import { Timestamp, GeoPoint } from '@firebase/firestore-types';
 
 export interface IRentalPoint {
   readonly address: string;
-  readonly latitude: number;
-  readonly longitude: number;
   readonly capacity: number;
   readonly bicycles: DocumentReference[];
+  readonly location: GeoPoint;
 }
 
 export interface IBicycle {
@@ -17,14 +16,9 @@ export interface IClient {
   readonly phone: number;
 }
 
-export interface IGeoCoordinate {
-  readonly latitude: number;
-  readonly longitude: number;
-}
-
 export interface IActiveBicycle {
   readonly client: DocumentReference;
   readonly rentalStart: Timestamp;
   readonly mileage: number;
-  readonly position: IGeoCoordinate;
+  readonly location: GeoPoint;
 }

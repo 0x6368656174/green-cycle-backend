@@ -31,7 +31,7 @@ import { DashboardTableComponent } from './dashboard-table/dashboard-table.compo
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule.enablePersistence(),
+    AngularFirestoreModule,
     AppRoutingModule,
     CdkTableModule,
   ],

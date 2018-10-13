@@ -5,6 +5,7 @@ import { combineLatest, of, Subject } from 'rxjs';
 import { map, switchMap, takeUntil } from 'rxjs/operators';
 import { IActiveBicycle, IBicycle, IRentalPoint } from '../db';
 import dotIcon from '../../assets/marker--dot.svg';
+import marker0 from '../../assets/markers/0.svg';
 import marker1 from '../../assets/markers/1.svg';
 import marker2 from '../../assets/markers/2.svg';
 import marker3 from '../../assets/markers/3.svg';
@@ -46,8 +47,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const dgMap = DG.map(this.map.nativeElement, {
-      'center': [50.263931, 127.531805],
-      'zoom': 13,
+      'center': [50.258439, 127.534925],
+      'zoom': 15,
       'zoomControl': false,
     });
 
@@ -61,8 +62,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         if (action.type === 'added') {
           const dbPoint = action.payload.doc.data();
 
-          this.rentalPointsMarkers[id] = DG.marker([dbPoint.latitude, dbPoint.longitude], {icon: this.getMarker(dbPoint.bicycles.length)})
-            .addTo(dgMap).bindPopup(dbPoint.address || '');
+          this.rentalPointsMarkers[id] = DG.marker(
+            [dbPoint.location.latitude, dbPoint.location.longitude],
+            {icon: this.getMarker((dbPoint.bicycles || []).length)},
+          ).addTo(dgMap).bindPopup(dbPoint.address || '');
         } else if (action.type === 'modified') {
           const dbPoint = action.payload.doc.data();
 
@@ -71,8 +74,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
             throw new Error(`Not found point with id = ${id}`);
           }
 
-          point.setLatLng(DG.latLng(dbPoint.latitude, dbPoint.longitude));
-          point.setIcon(this.getMarker(dbPoint.bicycles.length));
+          point.setLatLng(DG.latLng(dbPoint.location.latitude, dbPoint.location.longitude));
+          point.setIcon(this.getMarker((dbPoint.bicycles || []).length));
           point.bindPopup(dbPoint.address || '');
         } else {
           const point = this.rentalPointsMarkers[id];
@@ -98,7 +101,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       shadowAnchor: [22, 94]
     });
 
-
     const activeBikes$ = this.firestore.collection<IActiveBicycle>('activeBicycles').stateChanges().pipe(
       switchMap(actions => {
         const bicycles$ = actions.map(action => {
@@ -109,7 +111,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
               return of({
                 id,
                 type: 'removed',
-                position: undefined,
+                location: undefined,
                 name: undefined,
               });
             }
@@ -121,7 +123,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                   return {
                     id,
                     type,
-                    position: activeBicycle.position,
+                    location: activeBicycle.location,
                     name: bicycle.name,
                   };
                 }),
@@ -136,9 +138,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
 
     activeBikes$.subscribe(actions => {
-      actions.forEach(({id, type, position, name}) => {
+      actions.forEach(({id, type, location, name}) => {
         if (type === 'added') {
-          this.activeBicyclesMarkers[id] = DG.marker([position.latitude, position.longitude], {icon: bikeIcon}).addTo(dgMap)
+          this.activeBicyclesMarkers[id] = DG.marker([location.latitude, location.longitude], {icon: bikeIcon}).addTo(dgMap)
             .bindPopup(name || '');
         } else if (type === 'modified') {
           const point = this.activeBicyclesMarkers[id];
@@ -146,7 +148,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             throw new Error(`Not found point with id = ${id}`);
           }
 
-          point.setLatLng(DG.latLng(position.latitude, position.longitude));
+          point.setLatLng(DG.latLng(location.latitude, location.longitude));
           point.bindPopup(name || '');
         } else {
           const point = this.activeBicyclesMarkers[id];
@@ -164,6 +166,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private getMarker(num: number) {
     let icon;
     switch (num) {
+      case 0: icon = marker0; break;
       case 1: icon = marker1; break;
       case 2: icon = marker2; break;
       case 3: icon = marker3; break;
