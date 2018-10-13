@@ -11,6 +11,10 @@ export function calculateAmount(rentalStart: moment.Moment, rentalEnd: moment.Mo
     return 1000;
   }
 
+  if (duration.asMinutes() > 90) {
+    return 300;
+  }
+
   if (duration.asMinutes() > 60) {
     return 30;
   }
