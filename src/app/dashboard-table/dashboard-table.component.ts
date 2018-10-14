@@ -33,61 +33,71 @@ class ActiveBicyclesDataSource extends DataSource<IActiveBicycleRow> {
       startWith(moment()),
     );
 
-    return this.firestore.collection<IActiveBicycle>('activeBicycles').snapshotChanges().pipe(
-      map(changes => {
-        return changes.map(change => {
-          const data = change.payload.doc.data();
-          return {
-            bicycleId: change.payload.doc.id,
-            clientId: data.client.id,
-            rentalStart: moment(data.rentalStart.toDate()),
-            rentalStartString: moment(data.rentalStart.toDate()).format('HH:mm, DD MMMM'),
-            mileage: data.mileage.toFixed(2),
-          };
-        });
-      }),
-      switchMap(bicycles => {
-        const rows$ = bicycles.map(row => {
-          const client$ = this.firestore.collection('clients').doc<IClient>(row.clientId).valueChanges();
-          const bicycle$ = this.firestore.collection('bicycles').doc<IBicycle>(row.bicycleId).valueChanges();
+    return this.firestore
+      .collection<IActiveBicycle>('activeBicycles')
+      .snapshotChanges()
+      .pipe(
+        map(changes => {
+          return changes.map(change => {
+            const data = change.payload.doc.data();
+            return {
+              bicycleId: change.payload.doc.id,
+              clientId: data.client.id,
+              rentalStart: moment(data.rentalStart.toDate()),
+              rentalStartString: moment(data.rentalStart.toDate()).format('HH:mm, DD MMMM'),
+              mileage: data.mileage.toFixed(2),
+            };
+          });
+        }),
+        switchMap(bicycles => {
+          const rows$ = bicycles.map(row => {
+            const client$ = this.firestore
+              .collection('clients')
+              .doc<IClient>(row.clientId)
+              .valueChanges();
+            const bicycle$ = this.firestore
+              .collection('bicycles')
+              .doc<IBicycle>(row.bicycleId)
+              .valueChanges();
 
-          return combineLatest(client$, bicycle$, currentTime$).pipe(
-            map(([client, bicycle, currentTime]) => {
-              const duration = moment.duration(currentTime.diff(row.rentalStart)).clone();
+            return combineLatest(client$, bicycle$, currentTime$).pipe(
+              map(([client, bicycle, currentTime]) => {
+                const duration = moment.duration(currentTime.diff(row.rentalStart)).clone();
 
-              let durationString = '';
-              if (duration.asDays() >= 1) {
-                durationString += pluralize(duration.days(), 'день', 'дня', 'дней');
-              }
-              if (duration.asHours() >= 1) {
-                durationString += ' ' + pluralize(duration.hours(), 'час', 'часа', 'часов');
-              }
-              if (duration.asMinutes() >= 1) {
-                durationString += ' ' + pluralize(duration.minutes(), 'минута', 'минуты', 'минут');
-              }
-              return {
-                ...row,
-                bicycle: bicycle.name,
-                phone: formatPhone(client.phone),
-                duration: durationString,
-                amount: calculateAmount(row.rentalStart, currentTime).toFixed(2),
-              };
-            })
-          );
-        });
+                let durationString = '';
+                if (duration.asDays() >= 1) {
+                  durationString += pluralize(duration.days(), 'день', 'дня', 'дней');
+                }
+                if (duration.asHours() >= 1) {
+                  durationString += ' ' + pluralize(duration.hours(), 'час', 'часа', 'часов');
+                }
+                if (duration.asMinutes() >= 1) {
+                  durationString +=
+                    ' ' + pluralize(duration.minutes(), 'минута', 'минуты', 'минут');
+                }
+                return {
+                  ...row,
+                  bicycle: bicycle.name,
+                  phone: formatPhone(client.phone),
+                  duration: durationString,
+                  amount: calculateAmount(row.rentalStart, currentTime).toFixed(2),
+                };
+              }),
+            );
+          });
 
-        return combineLatest(rows$);
-      }),
-    );
+          return combineLatest(rows$);
+        }),
+      );
   }
 
-  disconnect(collectionViewer: CollectionViewer): void { }
+  disconnect(collectionViewer: CollectionViewer): void {}
 }
 
 @Component({
   selector: 'app-dashboard-table',
   templateUrl: './dashboard-table.component.html',
-  styleUrls: ['./dashboard-table.component.scss']
+  styleUrls: ['./dashboard-table.component.scss'],
 })
 export class DashboardTableComponent implements OnInit {
   bicycles: ActiveBicyclesDataSource;
@@ -96,7 +106,5 @@ export class DashboardTableComponent implements OnInit {
     this.bicycles = new ActiveBicyclesDataSource(firestore);
   }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

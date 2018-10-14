@@ -1,16 +1,16 @@
-@import "../variables";
+@import '../variables';
 
 :host {
+  align-items: center;
   background-color: $color-green-1;
   display: flex;
-  align-items: center;
   padding-right: 40px;
 }
 
 .title-section {
-  width: 270px;
   min-width: 270px;
   text-align: center;
+  width: 270px;
 }
 
 .logo {
@@ -18,36 +18,36 @@
 }
 
 .title-hint {
-  color: #ffffff;
+  color: #fff;
 }
 
 .search-input-label {
-  width: 100%;
-  position: relative;
   margin-right: 20px;
+  position: relative;
+  width: 100%;
 
-  &:before {
-    position: absolute;
-    left: 19px;
-    top: 17px;
+  &::before {
+    background-image: url('../../assets/icons/icon--search.svg');
     content: '';
     display: block;
     height: 16px;
+    left: 19px;
+    position: absolute;
+    top: 17px;
     width: 16px;
-    background-image: url('../../assets/icons/icon--search.svg');
   }
 }
 
 .search-input {
-  height: 50px;
-  width: 100%;
   background-color: $color-green-2;
   border-radius: 2px;
   border-style: none;
+  color: $color-gray;
+  height: 50px;
   padding-left: 50px;
   padding-right: 20px;
-  color: $color-gray;
   transition: background-color 0.2s ease-out;
+  width: 100%;
 
   &:focus {
     background-color: #fff;
@@ -63,49 +63,50 @@
 }
 
 .user-icon {
-  height: 45px;
-  width: 45px;
-  min-width: 45px;
-  border-radius: 45px;
   background-color: $color-green-2;
-  border-style: none;
   background-image: url('../../assets/icons/icon--user.svg');
   background-position: center;
   background-repeat: no-repeat;
+  border-radius: 45px;
+  border-style: none;
+  height: 45px;
+  min-width: 45px;
+  width: 45px;
 }
 
 .menu-button {
+  background-color: transparent;
   background-position: center;
   background-repeat: no-repeat;
-  background-color: transparent;
   border-style: none;
   height: 50px;
-  width: 50px;
   min-width: 50px;
   position: relative;
+  width: 50px;
 
-  &:before {
-    content: '';
-    width: 50px;
-    height: 50px;
-    top: 0;
-    left: 0;
-    position: absolute;
-    mask-repeat: no-repeat;
-    mask-position: center;
+  &::before {
     background-color: #fff;
+    content: '';
+    height: 50px;
+    left: 0;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    position: absolute;
+    top: 0;
     transition: background-color 0.2s ease-out;
+    width: 50px;
   }
 
-  &:hover:before {
+  &:hover::before {
     background-color: $color-green-3;
   }
 
-  &--menu:before {
+  &--menu::before {
     mask-image: url('../../assets/icons/icon--menu.svg');
     mask-size: 16px 16px;
   }
-  &--other:before {
+
+  &--other::before {
     mask-image: url('../../assets/icons/icon--other.svg');
     mask-size: 4px 16px;
   }

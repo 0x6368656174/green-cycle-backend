@@ -7,23 +7,23 @@
 }
 
 .buttons {
-  height: 106px;
-  width: 100%;
+  align-items: center;
   background-color: $color-green-1;
   display: flex;
-  align-items: center;
+  height: 106px;
   justify-content: center;
+  width: 100%;
 }
 
 .button {
-  width: 42px;
-  height: 42px;
+  background-color: $color-green-2;
   border-radius: 42px;
   border-style: none;
-  background-color: $color-green-2;
-  position: relative;
+  height: 42px;
   margin-right: 16px;
+  position: relative;
   transition: background-color 0.2s ease-out;
+  width: 42px;
 
   &:hover {
     background-color: $color-green-3;
@@ -33,29 +33,30 @@
     margin-right: 0;
   }
 
-  &:before {
+  &::before {
+    background-color: #fff;
     content: '';
     display: block;
-    width: 42px;
     height: 42px;
-    position: absolute;
     left: 0;
-    top: 0;
-    mask-repeat: no-repeat;
     mask-position: center;
-    background-color: #fff;
+    mask-repeat: no-repeat;
+    position: absolute;
+    top: 0;
+    width: 42px;
   }
 
-  &--mail:before {
+  &--mail::before {
     mask-image: url('../../assets/icons/icon--mail.svg');
     mask-size: 16px 12px;
   }
 
-  &--call:before {
+  &--call::before {
     mask-image: url('../../assets/icons/icon--call.svg');
     mask-size: 16px 20px;
   }
-  &--write:before {
+
+  &--write::before {
     mask-image: url('../../assets/icons/icon--write.svg');
     mask-size: 17px 17px;
   }
@@ -63,20 +64,20 @@
   &--active {
     background-color: #fff;
 
-    &:before {
+    &::before {
       background-color: $color-green-1;
     }
 
-    &:after {
+    &::after {
+      background-color: #fff;
+      border-radius: 5px;
       content: '';
       display: block;
-      width: 5px;
       height: 5px;
-      border-radius: 5px;
-      background-color: #fff;
-      position: absolute;
       left: 19px;
+      position: absolute;
       top: 47px;
+      width: 5px;
     }
   }
 }
@@ -91,88 +92,87 @@
 }
 
 .menu-link {
-  color: $color-green-4;
-  font-size: 13px;
-  display: flex;
   align-items: center;
+  color: $color-green-4;
+  display: flex;
+  font-size: 13px;
   transition: color 0.2s ease-out;
 
   &:hover {
-    font-weight: 700;
     color: #fff;
+    font-weight: 700;
   }
 
-  &:hover:before {
+  &:hover::before {
     background-color: #fff;
   }
 
-  &:before {
+  &::before {
+    background-color: $color-green-4;
     content: '';
     display: block;
+    height: 17px;
     margin-right: 19px;
     mask-position: center;
     mask-repeat: no-repeat;
-    background-color: $color-green-4;
-    width: 17px;
-    height: 17px;
     transition: background-color 0.2s ease-out;
+    width: 17px;
   }
 
   &--active {
     color: #fff;
     font-weight: 700;
 
-    &:before {
+    &::before {
       background-color: #fff;
     }
   }
 
-
-  &--home:before {
+  &--home::before {
     mask-image: url('../../assets/icons/icon--home.svg');
     mask-size: 17px 14px;
   }
 
-  &--location:before {
+  &--location::before {
     mask-image: url('../../assets/icons/icon--location.svg');
     mask-size: 11px 16px;
   }
 
-  &--cycle:before {
+  &--cycle::before {
     mask-image: url('../../assets/icons/icon--cycle.svg');
     mask-size: 17px 14px;
   }
 
-  &--finance:before {
+  &--finance::before {
     mask-image: url('../../assets/icons/icon--finance.svg');
     mask-size: 15px 15px;
   }
 
-  &--statistic:before {
+  &--statistic::before {
     mask-image: url('../../assets/icons/icon--statistic.svg');
     mask-size: 17px 10px;
   }
 
-  &--users:before {
+  &--users::before {
     mask-image: url('../../assets/icons/icon--users.svg');
     mask-size: 13px 13px;
   }
 
-  &--price:before {
+  &--price::before {
     mask-image: url('../../assets/icons/icon--price.svg');
     mask-size: 15px 15px;
   }
 
-  &--mail:before {
+  &--mail::before {
     mask-image: url('../../assets/icons/icon--mail.svg');
     mask-size: 15px 12px;
   }
 }
 
 .bottom-menu {
+  margin-bottom: 45px;
   margin-top: auto;
   padding-left: 40px;
-  margin-bottom: 45px;
 }
 
 .copyright {
@@ -187,8 +187,8 @@
 .bottom-menu-link {
   color: #fff;
   font-size: 13px;
-  transition: color 0.2s ease-out;
   text-decoration: none;
+  transition: color 0.2s ease-out;
 
   &:hover {
     color: $color-green-4;

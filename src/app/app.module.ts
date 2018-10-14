@@ -36,6 +36,6 @@ import { DashboardTableComponent } from './dashboard-table/dashboard-table.compo
     CdkTableModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

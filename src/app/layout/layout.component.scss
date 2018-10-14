@@ -1,15 +1,15 @@
-@import "../variables";
+@import '../variables';
 
 :host {
+  background-color: $color-green-2;
   display: grid;
-  grid-template-columns: 270px 1fr;
-  grid-template-rows: 160px 1fr;
   grid-template-areas:
     'header header'
     'menu content';
-  width: 100vw;
+  grid-template-columns: 270px 1fr;
+  grid-template-rows: 160px 1fr;
   height: 100vh;
-  background-color: $color-green-2;
+  width: 100vw;
 }
 
 .header {
@@ -22,17 +22,17 @@
 
 .content {
   grid-area: content;
-  padding-right: 40px;
   padding-bottom: 40px;
+  padding-right: 40px;
   position: relative;
 
-  &:before {
+  &::before {
+    background-color: $color-green-1;
     content: '';
     display: block;
-    width: 100%;
     height: 106px;
     position: absolute;
-    background-color: $color-green-1;
     top: 0;
+    width: 100%;
   }
 }

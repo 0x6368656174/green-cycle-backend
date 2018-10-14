@@ -1,42 +1,42 @@
 @import '../variables';
 
 .button {
+  background-color: transparent;
   background-position: center;
   background-repeat: no-repeat;
-  background-color: transparent;
   border-style: none;
   height: 50px;
-  width: 50px;
   min-width: 50px;
   position: relative;
+  width: 50px;
 
-  &:before {
-    content: '';
-    width: 50px;
-    height: 50px;
-    top: 0;
-    left: 0;
-    position: absolute;
-    mask-repeat: no-repeat;
-    mask-position: center;
+  &::before {
     background-color: #fff;
+    content: '';
+    height: 50px;
+    left: 0;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    position: absolute;
+    top: 0;
     transition: background-color 0.2s ease-out;
+    width: 50px;
   }
 
-  &--style-green:before {
+  &--style-green::before {
     background-color: $color-green-1;
   }
 
-  &:hover:before {
+  &:hover::before {
     background-color: $color-green-3;
   }
 
-  &--menu:before {
+  &--menu::before {
     mask-image: url('../../assets/icons/icon--menu.svg');
     mask-size: 16px 16px;
   }
 
-  &--other:before {
+  &--other::before {
     mask-image: url('../../assets/icons/icon--other.svg');
     mask-size: 4px 16px;
   }

@@ -7,16 +7,22 @@ import { map, takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-dashboard-pipes',
   templateUrl: './dashboard-pipes.component.html',
-  styleUrls: ['./dashboard-pipes.component.scss']
+  styleUrls: ['./dashboard-pipes.component.scss'],
 })
 export class DashboardPipesComponent implements OnInit, OnDestroy {
-  @Input() firstTitle: string;
-  @Input() secondTitle: string;
-  @Input() firstStatisticValue: string;
-  @Input() secondStatisticValue: string;
+  @Input()
+  firstTitle: string;
+  @Input()
+  secondTitle: string;
+  @Input()
+  firstStatisticValue: string;
+  @Input()
+  secondStatisticValue: string;
 
-  @ViewChild('firstChart') private firstChartElement: ElementRef<HTMLCanvasElement>;
-  @ViewChild('secondChart') private secondChartElement: ElementRef<HTMLCanvasElement>;
+  @ViewChild('firstChart')
+  private firstChartElement: ElementRef<HTMLCanvasElement>;
+  @ViewChild('secondChart')
+  private secondChartElement: ElementRef<HTMLCanvasElement>;
 
   firstValue$: Observable<number>;
   secondValue$: Observable<number>;
@@ -24,30 +30,40 @@ export class DashboardPipesComponent implements OnInit, OnDestroy {
   private secondChart: Chart;
   private ngUnsubscribe = new Subject();
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(private firestore: AngularFirestore) {}
 
   ngOnInit(): void {
-    this.firstValue$ = this.firestore.collection('statisticValues').doc(this.firstStatisticValue).valueChanges().pipe(
-      map(({max, current}) => {
-        return Math.round(max / 100 * current);
-      }),
-      takeUntil(this.ngUnsubscribe),
-    );
-    this.secondValue$ = this.firestore.collection('statisticValues').doc(this.secondStatisticValue).valueChanges().pipe(
-      map(({max, current}) => {
-        return Math.round(max / 100 * current);
-      }),
-      takeUntil(this.ngUnsubscribe),
-    );
+    this.firstValue$ = this.firestore
+      .collection('statisticValues')
+      .doc(this.firstStatisticValue)
+      .valueChanges()
+      .pipe(
+        map(({ max, current }) => {
+          return Math.round((max / 100) * current);
+        }),
+        takeUntil(this.ngUnsubscribe),
+      );
+    this.secondValue$ = this.firestore
+      .collection('statisticValues')
+      .doc(this.secondStatisticValue)
+      .valueChanges()
+      .pipe(
+        map(({ max, current }) => {
+          return Math.round((max / 100) * current);
+        }),
+        takeUntil(this.ngUnsubscribe),
+      );
 
     const options: Chart.ChartConfiguration = {
       type: 'doughnut',
       data: {
         labels: ['', ''],
-        datasets: [{
-          borderColor: ['#fff', '#27AE60'],
-          backgroundColor: ['#fff', '#27AE60']
-        }],
+        datasets: [
+          {
+            borderColor: ['#fff', '#27AE60'],
+            backgroundColor: ['#fff', '#27AE60'],
+          },
+        ],
       },
       options: {
         cutoutPercentage: 99,
@@ -55,17 +71,21 @@ export class DashboardPipesComponent implements OnInit, OnDestroy {
           enabled: false,
         },
         legend: {
-          display: false
+          display: false,
         },
         scales: {
-          xAxes: [{
-            display: false,
-          }],
-          yAxes: [{
-            display: false,
-          }]
+          xAxes: [
+            {
+              display: false,
+            },
+          ],
+          yAxes: [
+            {
+              display: false,
+            },
+          ],
         },
-      }
+      },
     };
 
     this.firstChart = new Chart(this.firstChartElement.nativeElement, options);

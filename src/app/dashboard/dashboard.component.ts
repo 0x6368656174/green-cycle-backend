@@ -34,27 +34,29 @@ import marker24 from '../../assets/markers/24.svg';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  @ViewChild('map') private map: ElementRef<HTMLDivElement>;
+  @ViewChild('map')
+  private map: ElementRef<HTMLDivElement>;
 
   private rentalPointsMarkers = {};
   private activeBicyclesMarkers = {};
   private ngUnsubscribe = new Subject();
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(private firestore: AngularFirestore) {}
 
   ngOnInit(): void {
     const dgMap = DG.map(this.map.nativeElement, {
-      'center': [50.258439, 127.534925],
-      'zoom': 15,
-      'zoomControl': false,
+      center: [50.258439, 127.534925],
+      zoom: 15,
+      zoomControl: false,
     });
 
-    const rentalPoints$ = this.firestore.collection<IRentalPoint>('rentalPoints').stateChanges().pipe(
-      takeUntil(this.ngUnsubscribe),
-    );
+    const rentalPoints$ = this.firestore
+      .collection<IRentalPoint>('rentalPoints')
+      .stateChanges()
+      .pipe(takeUntil(this.ngUnsubscribe));
 
     rentalPoints$.subscribe(actions => {
       actions.forEach(action => {
@@ -64,8 +66,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
           this.rentalPointsMarkers[id] = DG.marker(
             [dbPoint.location.latitude, dbPoint.location.longitude],
-            {icon: this.getMarker((dbPoint.bicycles || []).length)},
-          ).addTo(dgMap).bindPopup(dbPoint.address || '');
+            { icon: this.getMarker((dbPoint.bicycles || []).length) },
+          )
+            .addTo(dgMap)
+            .bindPopup(dbPoint.address || '');
         } else if (action.type === 'modified') {
           const dbPoint = action.payload.doc.data();
 
@@ -98,49 +102,59 @@ export class DashboardComponent implements OnInit, OnDestroy {
       shadowUrl: undefined,
       shadowRetinaUrl: undefined,
       shadowSize: [68, 95],
-      shadowAnchor: [22, 94]
+      shadowAnchor: [22, 94],
     });
 
-    const activeBikes$ = this.firestore.collection<IActiveBicycle>('activeBicycles').stateChanges().pipe(
-      switchMap(actions => {
-        const bicycles$ = actions.map(action => {
-          const id = action.payload.doc.id;
-          const type = action.type;
-          switch (type) {
-            case 'removed': {
-              return of({
-                id,
-                type: 'removed',
-                location: undefined,
-                name: undefined,
-              });
-            }
-            default: {
-              const activeBicycle: IActiveBicycle = action.payload.doc.data();
+    const activeBikes$ = this.firestore
+      .collection<IActiveBicycle>('activeBicycles')
+      .stateChanges()
+      .pipe(
+        switchMap(actions => {
+          const bicycles$ = actions.map(action => {
+            const id = action.payload.doc.id;
+            const type = action.type;
+            switch (type) {
+              case 'removed': {
+                return of({
+                  id,
+                  type: 'removed',
+                  location: undefined,
+                  name: undefined,
+                });
+              }
+              default: {
+                const activeBicycle: IActiveBicycle = action.payload.doc.data();
 
-              return this.firestore.collection('bicycles').doc<IBicycle>(id).valueChanges().pipe(
-                map(bicycle => {
-                  return {
-                    id,
-                    type,
-                    location: activeBicycle.location,
-                    name: bicycle.name,
-                  };
-                }),
-              );
+                return this.firestore
+                  .collection('bicycles')
+                  .doc<IBicycle>(id)
+                  .valueChanges()
+                  .pipe(
+                    map(bicycle => {
+                      return {
+                        id,
+                        type,
+                        location: activeBicycle.location,
+                        name: bicycle.name,
+                      };
+                    }),
+                  );
+              }
             }
-          }
-        });
+          });
 
-        return combineLatest(bicycles$);
-      }),
-      takeUntil(this.ngUnsubscribe),
-    );
+          return combineLatest(bicycles$);
+        }),
+        takeUntil(this.ngUnsubscribe),
+      );
 
     activeBikes$.subscribe(actions => {
-      actions.forEach(({id, type, location, name}) => {
+      actions.forEach(({ id, type, location, name }) => {
         if (type === 'added') {
-          this.activeBicyclesMarkers[id] = DG.marker([location.latitude, location.longitude], {icon: bikeIcon}).addTo(dgMap)
+          this.activeBicyclesMarkers[id] = DG.marker([location.latitude, location.longitude], {
+            icon: bikeIcon,
+          })
+            .addTo(dgMap)
             .bindPopup(name || '');
         } else if (type === 'modified') {
           const point = this.activeBicyclesMarkers[id];
@@ -166,31 +180,81 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private getMarker(num: number) {
     let icon;
     switch (num) {
-      case 0: icon = marker0; break;
-      case 1: icon = marker1; break;
-      case 2: icon = marker2; break;
-      case 3: icon = marker3; break;
-      case 4: icon = marker4; break;
-      case 5: icon = marker5; break;
-      case 6: icon = marker6; break;
-      case 7: icon = marker7; break;
-      case 8: icon = marker8; break;
-      case 9: icon = marker9; break;
-      case 10: icon = marker10; break;
-      case 11: icon = marker11; break;
-      case 12: icon = marker12; break;
-      case 13: icon = marker13; break;
-      case 14: icon = marker14; break;
-      case 15: icon = marker15; break;
-      case 16: icon = marker16; break;
-      case 17: icon = marker17; break;
-      case 18: icon = marker18; break;
-      case 19: icon = marker19; break;
-      case 20: icon = marker20; break;
-      case 21: icon = marker21; break;
-      case 22: icon = marker22; break;
-      case 23: icon = marker23; break;
-      case 24: icon = marker24; break;
+      case 0:
+        icon = marker0;
+        break;
+      case 1:
+        icon = marker1;
+        break;
+      case 2:
+        icon = marker2;
+        break;
+      case 3:
+        icon = marker3;
+        break;
+      case 4:
+        icon = marker4;
+        break;
+      case 5:
+        icon = marker5;
+        break;
+      case 6:
+        icon = marker6;
+        break;
+      case 7:
+        icon = marker7;
+        break;
+      case 8:
+        icon = marker8;
+        break;
+      case 9:
+        icon = marker9;
+        break;
+      case 10:
+        icon = marker10;
+        break;
+      case 11:
+        icon = marker11;
+        break;
+      case 12:
+        icon = marker12;
+        break;
+      case 13:
+        icon = marker13;
+        break;
+      case 14:
+        icon = marker14;
+        break;
+      case 15:
+        icon = marker15;
+        break;
+      case 16:
+        icon = marker16;
+        break;
+      case 17:
+        icon = marker17;
+        break;
+      case 18:
+        icon = marker18;
+        break;
+      case 19:
+        icon = marker19;
+        break;
+      case 20:
+        icon = marker20;
+        break;
+      case 21:
+        icon = marker21;
+        break;
+      case 22:
+        icon = marker22;
+        break;
+      case 23:
+        icon = marker23;
+        break;
+      case 24:
+        icon = marker24;
+        break;
     }
 
     return DG.icon({
@@ -202,7 +266,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       shadowUrl: undefined,
       shadowRetinaUrl: undefined,
       shadowSize: [68, 95],
-      shadowAnchor: [22, 94]
+      shadowAnchor: [22, 94],
     });
   }
 

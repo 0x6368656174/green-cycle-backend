@@ -6,6 +6,6 @@ export const environment = {
     databaseURL: 'https://green-cycle.firebaseio.com',
     projectId: 'green-cycle',
     storageBucket: 'green-cycle.appspot.com',
-    messagingSenderId: '7069445100'
-  }
+    messagingSenderId: '7069445100',
+  },
 };
